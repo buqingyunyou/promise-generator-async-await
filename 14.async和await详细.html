@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+
+<body>
+  <!-- 
+    async/await 与生成器函数的对应关系:
+      (1) async相当于 *
+      (2) await相当于 yield
+
+    async/await函数 与生成器函数的不同:
+      (1) 生成器函数调用: 先调用gen()返回迭代器, 再通过迭代器调next方法
+      (2) async函数调用: 直接调用即可
+
+    //async函数调用时
+      //遇到await时, 则会等待await后面的代码执行完, 才会往下执行, 否则一直等待
+
+    await是运算符
+      1. await, 通常可接:
+          (1) 直接量 数字, 字符串, 数组等
+          (2) promise对象
+              a. 如果接的是promise对象, 则会阻塞后面的代码, 等promise对象成功
+              b. 如果promise最终失败了, 则会直接退出async函数, 不会往下执行
+          
+      2. await表达式返回值:
+        (1) 如果await接直接量, 则返回这个直接量
+        (2) 如果await接promise对象, 则返回promise成功的数据
+
+      
+    执行async函数, 返回值是一个promise对象:
+      (1) 如果async函数内部出错, 则返回的promise对象就是失败对象
+        a. 正常报错
+        b. 内部promise对象失败
+      (2) 如果async函数所有代码执行完, 则返回的promise对象时成功对象
+
+
+   -->
+
+  <script>
+    {
+      // 使用async和await定义一个异步函数
+      async function fn() {
+        console.log("fn函数执行了");
+        /* 
+          async函数调用时, 遇到await时, 当前函数执行开始阻塞, 回到主线程执行同步代码
+          等同步代码执行结束后, 再回到该位置继续执行
+        */
+
+        // 如果await后面, 跟直接量, 则不会等待, 直接进入下一个await (因为不是异步代码)
+
+        // let re1 = await 123; //re1是123
+        // 如果await后面, 跟定时器, 则设置定时器是同步的, 定时器中的回调函数是异步的, 会等待
+        let re2 = await setTimeout(() => {
+          console.log("await异步代码执行"); 
+        }, 2000)
+        let re3 = await new Promise((resolve,reject)=>{
+          setTimeout(()=>{
+            resolve('成功');
+            console.log('成功');
+          },1000)
+        })
+
+        console.log("await后面的代码执行了");
+        // 如果async函数中写了return a, 则async函数调用返回值,就是包裹a的promise对象
+        return "a";
+      }
+
+      // async函数调用后, 返回promise对象
+      const re = fn();
+      // console.log(re); //Promise {<fulfilled> "a"}
+    }
+
+    {
+      // async function fn() {
+
+      //   console.log("333");
+
+      //   // 遇到await后, await后跟的是异步代码, 则会在此等待
+      //   const re2 = await new Promise((resolve, reject) => {
+      //     setTimeout(function () {
+      //       console.log(222);
+      //       reject('heng');
+      //     }, 2000)
+      //   })
+
+      //   // 此处的代码, 只有等上面await异步代码执行完, 才会执行
+      //   console.log(111);
+      //   console.log(re2);
+      //   return "hello"
+      // }
+
+      // const re = fn();
+
+
+      // // 处理await的reject状态报错问题...
+      // re.catch((err)=>{
+      //   console.log(err); //'heng'  接收报错信息
+      // })
+
+      // re.then((data) =>{
+      //   console.log(data);
+      // })
+
+      // console.log(re); //Promise {<pending>} 'heng'
+
+    }
+  </script>
+</body>
+
+</html>

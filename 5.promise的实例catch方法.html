@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+
+<body>
+  <!-- 
+    catch函数
+      1. catch函数, 监听promise对象状态, 如果修改为失败, 则调用catch异步回调函数
+      2. 一般写了catch函数, 那么then函数的失败回调函数就不写, 因为写了then的失败回调函数, catch函数就失效了
+      3. 使用:
+        promise.catch((err)=>{异步代码...})
+
+   -->
+  <script>
+    // 1.定义容器,并调用其同步回调函数
+    const promise = new Promise((resolve,reject)=>{
+      setTimeout(()=>{
+        console.log("异步代码");
+        reject('失败传递的数据');  //失败了
+      },2000) 
+    })
+
+    // 2.使用容器对象调用then方法, 监听状态, 进行不同操作
+    // promise.then(
+    //   (result)=>{
+    //     console.log("成功后的操作");
+    //     // 接收传递的数据
+    //     console.log(result);
+    //   },
+    //   (err)=>{
+    //     console.log("失败后的操作");
+    //     // 接收传递的数据
+    //     console.log(err);
+    //   })
+
+    // 3. 使用容器对象调用then方法(成功回调函数), 并链式调用catch方法(失败回调函数)
+    promise.then(
+      (result)=>{
+        console.log("成功后的操作");
+        // 接收传递的数据
+        console.log(result);
+      }).catch(
+        // 链式编程, 直接在后面.catch()调用
+        (err)=>{
+          // 如果失败, 执行的操作
+          console.log("失败后的统一操作");
+          // 接收数据
+          console.log(err);
+      })
+
+  </script>
+
+</body>
+
+</html>

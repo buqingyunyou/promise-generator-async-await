@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+
+<body>
+  <!-- 
+    Promise.prototype.then  原型方法(实例方法)
+    1. 说明:
+      该函数会监听promise实例对象的状态, 一旦promise状态修改为 fulfilled, 则其函数内的异步代码开始执行
+    2. 使用:
+      promise.then((data)=>{}, (err)=>{})
+      a. then方法有两个参数
+        参数一: 成功回调函数
+          当promise对象的状态修改为fulfilled时, 调用的异步回调函数
+        参数二: 失败回调函数
+          当promise对象的状态修改为rejected时, 调用的异步回调函数
+      b. 参数一中定义的形参data, 用于接收promise容器中 resolve(data) 传入的值
+      c. 参数二中定义的形参err, 用于接收promise容器中 reject(err) 传入的值
+   -->
+
+  <script>
+    {
+      /* 
+        第一步: 定义一个promise容器
+      */
+      // new Promise中的参数是同步回调函数
+      const promise = new Promise((resolve, reject) => {
+        // setTimeout定时器中的参数, 是异步回调函数
+        setTimeout(() => {
+          // console.log("异步代码");
+
+          /* 
+            2秒内,后台响应了数据回来, 则将状态改为成功
+          */
+          // resolve('异步代码执行成功,拿到的数据传递出去'); //传递出去的数据
+
+          /* 
+            2秒内, 后台没有响应数据回来时, 表示已经超时, 此时将状态改为失败
+          */
+          reject("异步代码失败时, 传递出去的数据");  //传递出去的数据
+        },2000)
+      })
+
+      /* 
+        第二步: 调用then方法 (该调用, 用于监听promise状态, 若修改, 则执行对应的异步回调函数)
+          then函数中的参数, 是异步回调函数
+      */
+      // promise.then((成功数据)=>{成功则执行的异步代码},(失败数据)=>{失败则执行的异步代码})
+      promise.then(
+        // result接收到promise异步代码执行成功或失败的数据
+        (result) => {
+          // 成功的异步回调函数
+          console.log("如果拿到后台数据, 进行执行以下操作...");
+
+          // 输出拿到的数据
+          console.log(result);
+        },
+        (err) => {
+          // 失败的异步回调函数
+          console.log("如果没有拿到后代数据, 进行执行以下操作...");
+
+          // 输出拿到的数据
+          console.log(err);
+        })
+
+        console.log(promise);
+
+
+    }
+  </script>
+</body>
+
+</html>

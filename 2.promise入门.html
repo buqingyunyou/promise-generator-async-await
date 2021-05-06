@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+
+<body>
+  <!-- 
+    引入promise构造函数的背景:
+      回调函数嵌套回调函数时, 执行逻辑复杂, 不易于维护和编写 (此时也被称为 [回调地狱])
+    
+    回调函数分类:
+      1. 同步回调函数 (将函数A作为实参, 传入另一个函数B中)
+        将函数A传入另一个函数B, 并在该函数B中进行 [手动进行调用], 此时的函数A就叫同步回调函数
+      2. 异步回调函数 (将函数A作为参数, 传入另一个函数B中)
+        将函数A传入另一个函数B, 并在该函数B中进行 [被自动调用], 此时的函数A就叫异步回调函数
+
+    Promise:
+      1. 是一个构造函数, 通过new Promise((resolve,reject)=>{ resolve(data) 或者 reject(err)... })
+        (1) 通过new 调用该函数
+        (2) new调用时, 需要传入回调函数     (定义状态修改的逻辑)
+        (3) 回调函数中, 默认传入两个参数resolve, reject
+        (4) 如果在回调函数中, 调用resolve(), 则将promise状态修改为 fullfilled 成功状态
+          如果需要将当前的成功相关数据, 传送到then回调函数中, 通过resolve(data)方式传递
+          在then函数中的回调函数(参数), 直接在(data) => {...} 即可接收到数据
+        (5) 如果在回调函数中, 调用reject(), 则将promise状态修改该为 rejected 失败状态
+          如果需要将当前失败数据, 传送到then回调函数中, 通过resolve(err)方式传递
+
+      2. Promise.prototype.then((data)=>{ ... return ..},(err)=>{ ... return ..})
+        两个参数(回调函数):
+          参数一: 表示promise状态改为成功时, 调用该回调函数
+          参数二: 表示promise状态改为失败时, 调用该回调函数
+        
+      3. Promise.prototype.catch(()=>{ ... })
+        一个参数(回调函数):
+          表示如果promise容器中执行报错时, 直接调用该回调函数, 输出报错信息
+          如果写了catch方法, 一般就不用去写then方法的第二个参数
+
+      4. promise有三种状态: 
+        1. 未定义状态 pending
+        2. 成功状态 fulfiled
+        3. 失败状态 rejected
+
+      5. promise容器中, 调用resolve(), 会修改当前promise对象的状态为 成功
+      6. promise容器中, 调用reject(), 会修改当前promise对象的状态为 失败
+
+      7. let promise = Promise.resolve() 返回一个成功的promise
+      8. let promise = Promise.reject()  返回一个失败的promise
+   -->
+  <script>
+    {
+      // 回调函数多级嵌套
+      // let timer1 = setTimeout(() => {
+      //   console.log('a数据请求回来了');
+      //   let timer2 = setTimeout(() => {
+      //     console.log('b数据请求回来了');
+      //     let timer3 = setTimeout(() => {
+      //       console.log('c数据请求回来了');
+      //     }, 3000)
+      //   }, 2000)
+      // }, 1000)
+      /* 
+        执行过程: 
+          1. 先执行同步代码, 遇到定时器timer1, 则将timer1放入到回调队列中
+          2. 当timer1时间到之后, 输出"a数据请求回来了", 然后将timer2放入到回调队列中
+          3. 当timer2时间到之后, 输出'b数据请求回来了', 然后将timer3放入到回调队列中
+          4. 当timer3时间到之后, 输出'c数据请求回来了'
+       */
+    }
+
+    {
+      /* 
+        pending 初始化状态 (异步代码还在执行中, promise的状态还没有修改)
+      */
+    //   const promise = new Promise((resolve, reject) => {
+    //     // (1)同步调用 (promise回调函数是 同步执行)
+    //     // ...同步代码
+
+    //     // (2)执行异步操作(异步代码)
+    //     setTimeout(() => {
+    //       console.log('异步代码执行了...'); //异步代码后执行
+    //     }, 1000);
+    //   });
+    //   console.log(promise); //同步代码先执行 (此时的promise是pending状态)
+    }
+
+    {
+      /* 
+        resovled/fulfilled 成功状态 (异步代码执行成功, 即在异步代码中调用了resolve()函数, 将promise对象的状态, 由pending修改为fulfilled)
+      */
+      // const promise = new Promise((resolve, reject) => {
+
+      //   //异步代码
+      //   setTimeout(() => {
+      //     console.log('请求的数据成功收到...');
+      //     // 调用resolve函数, 将当前promise对象修改为成功对象
+      //     // 模拟接收到的后台数据
+      //     let arr = [1, 2, 3]
+      //     // 将后台接收的数据, 作为参数传入resolve函数, 以便后续代码中, 可以拿到
+      //     resolve(arr)
+      //   }, 1000)
+
+      //   // 该代码在promise容器中, 不在异步代码中, 会同步执行
+      //   console.log('异步代码后面的代码');
+      // })
+      // console.log(promise); //主线程代码先执行
+    }
+
+    // console.log("--------------------------");
+    {
+      // rejected状态(失败状态), 让promise对象修改状态为失败, 是在promise容器中调用reject(参数)函数  (通常为异步代码执行失败后, 调用reject函数, 进行状态修改)
+      const promise = new Promise((resolve,reject)=>{
+        // 异步代码
+        setTimeout(()=>{
+          console.log('异步代码执行失败了... 例如:请求数据没有收到');
+          // 调用reject函数进行状态修改
+          // let errData = ['1']
+          reject("异步代码执行失败了...");
+        },2000)
+
+        // 此处的代码, 不受异步代码影响, 会同步执行
+        console.log('容器中异步代码之外的代码...');
+      });
+      console.log(promise);
+    }
+  </script>
+</body>
+
+</html>

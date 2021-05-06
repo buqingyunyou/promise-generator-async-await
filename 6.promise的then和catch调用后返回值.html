@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+
+<body>
+  <!-- 
+    情况一:
+      如果then/catch回调函数中, 没有写return
+      调用后的返回值, 为一个新的promise对象 (成功状态)
+
+    情况二:
+      如果then/catch回调函数中, return 其他值A  (不是promise)
+      调用后的返回值, 为一个新的promise对象 (值为该值A)
+
+    情况三:
+      如果then/catch回调函数中, return 指定的promise对象
+      调用后的返回值, 为该指定promise对象, 具体状态和值由指定时决定
+
+    情况四:
+      如果then/catch回调函数中, 执行报错了
+      返回一个失败的promise对象
+   -->
+  <script>
+    {
+      /* 
+        情况一: then/catch回调函数中, 没有return时
+      */
+      // const promise = new Promise((resolve, reject) => {
+      //   setTimeout(() => {
+      //     console.log('容器中异步代码');
+      //     // resolve("成功传递值");
+      //     reject("失败传递值");
+      //   })
+      // })
+      // let re = promise.then(
+      //   (result) => {
+      //     console.log("成功后执行以下操作...");
+      //     console.log(result);
+      //   },
+      //   (err) => {
+      //     console.log("失败后执行以下操作...");
+      //     console.log(err);
+      //   }
+      // )
+
+      // // 没有return时, 不管调用then方法的promise对象是成功,还是失败;
+      // // 返回值: 都是一个新的promise对象(成功状态), 对象值为undefined
+      // console.log(re);
+    }
+
+    {
+      /* 
+        情况二: then/catch回调函数中, return A(其他值)
+      */
+      // const promise = new Promise((resolve, reject) => {
+      //   setTimeout(() => {
+      //     console.log('容器中异步代码');
+      //     resolve("成功传递值");
+      //     // reject("失败传递值");
+      //   })
+      // })
+      // let re = promise.then(
+      //   (result) => {
+      //     console.log("成功后执行以下操作...");
+      //     console.log(result);
+
+      //  // return一个指定值
+      //     return 111;
+      //   },
+      //   (err) => {
+      //     console.log("失败后执行以下操作...");
+      //     console.log(err);
+
+      //     return 222;
+      //   }
+
+      // )
+      // /* 
+      //   (1) 如果调用then函数的promise是成功的, 则返回一个[成功]的新promise, 值为then函数中return的那个值
+      //   (2) 如果调用then函数的promise是失败的, 则返回一个[成功]的新promise, 值为then函数中return的那个值
+      // */
+      // console.log(re);
+      // // console.log(re === promise); //false
+    }
+
+    {
+      /* 
+        情况三: 如果then回调函数中, return一个指定的promise对象
+      */
+      // const promise = new Promise((resolve, reject) => {
+      //   setTimeout(() => {
+      //     console.log('容器中异步代码');
+      //     // resolve("成功传递值");
+      //     reject("失败传递值");
+      //   })
+      // })
+      // let re = promise.then(
+      //   (result) => {
+      //     console.log("成功后执行以下操作...");
+      //     console.log(result);
+
+      //     // return一个指定的promise对象
+      //     return new Promise((resolve,reject)=>{
+      //       resolve("指定的成功数据")
+      //     })
+      //   },
+      //   (err) => {
+      //     console.log("失败后执行以下操作...");
+      //     console.log(err);
+
+      //     return new Promise((resolve,reject)=>{
+      //       reject("指定的失败数据")
+      //     })
+      //   }
+      // )
+
+      // /* 
+      //   (1) 如果调用then函数的promise是成功的, 则返回一个[成功]的新promise, 值为then函数中return的promise对象的传递值
+      //   (2) 如果调用then函数的promise是失败的, 则返回一个[失败]的新promise, 值为then函数中return的promise对象的传递值
+      // */
+      // console.log(re);
+    }
+
+
+    {
+      /* 
+        情况四: 如果then回调函数执行出错了
+      */
+      const promise = new Promise((resolve, reject) => {
+        setTimeout(() => {
+          console.log('容器中异步代码');
+          resolve("成功传递值");
+          // reject("失败传递值");
+        })
+      })
+      let re = promise.then(
+        (result) => {
+          // 模拟执行出错
+          // console.log(a);
+
+          console.log("成功后执行以下操作...");
+          console.log(result);
+
+          // return一个指定的promise对象
+          // return new Promise((resolve,reject)=>{
+          //   resolve("指定的成功数据")
+          // })
+          // return "aa";
+          throw new Error('报错..')
+        }
+      ).catch(
+        (err)=>{
+          console.log("失败后执行以下操作...");
+
+          // ReferenceError: a is not defined
+          // at 6.promise的then和catch调用后返回值.html:144
+          console.log(err);
+        }
+      )
+
+      /* 
+        无论then方法中是否return, 或者return任意值, 其结果都是:
+         > 返回一个新的[成功]的promise对象, 值为undefined
+      */
+      console.log(re); 
+    }
+  </script>
+
+
+</body>
+
+</html>

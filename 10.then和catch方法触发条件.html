@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+
+<body>
+  <script>
+    /* 
+      promise.then 和 promise.catch方法的触发条件:
+        1. 当promise状态修改为成功时, 触发then函数
+        2. 当promise状态修改为失败时, 触发catch函数
+        3. 如果promise状态为pending, 不会触发then和catch函数
+    */
+   const promise = new Promise((resolve,reject)=>{
+    // 异步代码
+    setTimeout(()=>{
+      // resolve();
+      reject();
+    },1000)
+   })
+
+   promise.then(
+     (result)=>{
+      console.log("成功后执行..");
+     },
+     (err)=>{
+      console.log("失败后执行..");
+     }
+   )
+
+
+  </script>
+</body>
+
+</html>

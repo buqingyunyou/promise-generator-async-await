@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+
+<body>
+  <!-- <script src="./fs.js"></script> -->
+  <script>
+    {
+
+      async function fn(){
+        await new Promise((resolve,reject)=>{
+          setTimeout(()=>{
+            console.log("请求a数据成功");
+
+            /* 
+              await promise表达式执行结束后(即promise状态改为成功), 才会执行后面的代码
+            */
+            resolve('成功数据a');
+          },1000)
+        });
+        await new Promise((resolve,reject)=>{
+          setTimeout(()=>{
+            console.log("请求b数据成功");
+            resolve('成功数据b');
+          },1000)
+        });
+        await new Promise((resolve,reject)=>{
+          setTimeout(()=>{
+            console.log("请求c数据成功");
+            resolve("成功数据c");
+          },1000)
+        });
+      }
+  
+      const re = fn();
+    }
+
+
+
+
+
+  </script>
+</body>
+
+</html>

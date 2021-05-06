@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+
+<body>
+  <script>
+    /* 
+      Promise构造函数, 还有几个静态方法:
+        1. Promise.all([promise1,promise2,...])
+          (1) 参数是由promise实例组成的数据
+          (2) 返回值是promise 
+          (3) 返回的promise对象的状态:
+            (a) 如果参数中的promise实例状态都是成功, 则该方法返回的promise对象状态为成功
+            (b) 如果参数中的promise实例存在一个是失败, 则该方法返回的promise对象状态为失败
+
+        2. Promise.resolve() 
+          返回一个成功的promise对象
+
+        3. Promise.reject()
+          返回一个失败的promise对象
+
+        4. Promise.allSettled([promise1,promise2,...])  获取所有参数中的promise对象的状态及值
+          返回一个未定义的promise对象
+          对象中的值
+            一个数组: 数组中保存所有promise对象的状态及值
+            
+    */
+    {
+      /* 
+        (1) 如果参数中的所有promise都是成功
+      */
+      const promise1 = new Promise((resolve, reject) => {
+        // reject();
+        resolve();
+      })
+      const promise2 = new Promise((resolve, reject) => {
+        //  reject();
+        resolve();
+      })
+
+      let re = Promise.all([promise1, promise2]);
+      console.log(re); // promise (fulfilled)
+    }
+
+    {
+      /* 
+        (2) 如果参数中存在一个promise是失败的
+      */
+      const promise3 = new Promise((resolve, reject) => {
+        // reject();
+        resolve();
+      })
+      const promise4 = new Promise((resolve, reject) => {
+        reject();
+        // resolve();
+      })
+
+      let re1 = Promise.all([promise3, promise4]);
+      console.log(re1); // promise (rejected)
+
+    }
+
+    {
+      console.log(Promise.resolve()); //Promise {<fulfilled>: undefined}
+    }
+
+    {
+      console.log(Promise.reject()); //Promise {<rejected>: undefined}
+    }
+
+    {
+      const promise1 = new Promise((resolve, reject) => {
+        // reject();
+        resolve();
+      })
+      const promise2 = new Promise((resolve, reject) => {
+        //  reject();
+        resolve();
+      })
+
+      let re = Promise.allSettled([promise1,promise2]);
+      console.log(re);
+    }
+  </script>
+</body>
+
+</html>

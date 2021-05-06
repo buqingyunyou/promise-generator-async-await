@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+
+<body>
+  <script>
+    /*
+      需求：setTimeout模拟发送请求
+      请求a数据，请求成功后, 再请求b数据，请求成功后, 再请求c数据
+  */
+    const promise = new Promise((resolve,reject)=>{
+      setTimeout(()=>{
+        // 请求a数据
+        resolve("a数据OK"); //请求成功
+        // reject() //一旦失败, 直接进去catch方法
+        console.log('a数据Ok');
+      },1000)
+    })
+
+    promise.then(
+      (result)=>{
+        // 考虑到then方法的返回值, 都是一个新的promise对象, 所以需要在此设置一个指定promise对象
+        return new Promise((resolve,reject)=>{
+          setTimeout(()=>{
+            // 请求b数据
+            resolve("b数据");
+            // reject();
+            // console.log(result);
+            console.log("b数据OK");
+          },2000)
+        })
+      }
+    ).then(
+      (result)=>{
+        return new Promise((resolve,reject)=>{
+          setTimeout(()=>{
+            // 请求c数据
+            // reject();
+            resolve('c数据');
+            // console.log(result);
+            console.log("c数据OK");
+          },3000)
+        })
+      }
+    ).then(()=>{
+      console.log("所有数据请求完毕...");
+    })
+    .catch(
+      // 如果以上有请求数据失败, 则直接这里
+      (err)=>{
+        console.log('请求数据失败, 请重试...');
+      }
+    )
+    
+  </script>
+</body>
+
+</html>

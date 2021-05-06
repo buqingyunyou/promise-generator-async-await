@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+
+<body>
+  <!-- 
+    async和await
+    (1) async:
+      用于声明一个函数时异步函数
+    (2) await:
+      阻塞当前异步函数的执行, 等待后面的promise对象状态修改为成功,才会放行
+
+   
+    1. async函数
+      async函数, 即普通函数声明时, 在function前面加async
+      简单理解: async function声明的函数, 叫异步函数
+
+    2. async函数声明语法:
+      async function(){
+        await 异步操作;
+        await 异步操作;
+      }
+    
+    3. async函数被调用时, 会返回一个promise对象
+      如果在函数中return一个直接量, 那么async会将该直接量通过Promise.resolve()封装成一个promise对象 (即如果函数中写了return 直接量, 则实际返回的是包裹该直接量的promise对象)
+
+    4. async必须和await配合, 才具备异步效果
+      单独的async声明的函数, 还是同步执行
+
+   -->
+  <script>
+    {
+      /* 
+       没有return时的返回值
+      */
+      async function fn(){
+        console.log("异步函数执行");
+      }
+      // 调用异步函数
+      let re = fn();
+      console.log(re);  //Promise {<fulfilled>: undefined}
+      // 调用同步函数
+      console.log("同步代码执行");
+    }
+
+    console.log("-----------------------------------------");
+    {
+      /* 
+        return 直接量  的返回值
+      */
+      async function fn(){
+        console.log("异步函数执行");
+        return 1;
+      }
+      // 调用异步函数
+      let re = fn();
+      console.log(re);  //Promise {<fulfilled>: 1}
+      // 调用同步函数
+      console.log("同步代码执行");
+    }
+
+
+  </script>
+</body>
+
+</html>

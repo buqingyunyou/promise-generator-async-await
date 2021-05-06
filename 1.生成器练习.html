@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+
+<body>
+  <button id="btn">点击抽奖</button>
+
+  <script>
+    let oBtn = document.getElementById('btn');
+    
+    // 绑定事件, 在事件函数中, 调用生成器函数, 返回yield后面的值
+    /* 
+      特别注意:
+        如果yield后面的值是一个表达式, 则会执行该表达式
+    */
+    oBtn.onclick = function(){
+      start.next();
+    }
+    
+    function draw(count){
+      // alert("还剩"+(count-1)+"次机会");
+      alert(`还剩${count}次机会`);
+    }
+
+    let start = gen();
+    
+    function * gen(){
+      yield draw(5);
+      yield draw(4);
+      yield draw(3);
+      yield draw(2);
+      yield draw(1);
+      return "";
+    }
+
+  </script>
+</body>
+
+</html>

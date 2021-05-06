@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+
+<body>
+  <script>
+    /* 
+      生成器函数, 其实就是将异步代码, 进行流程控制, 让异步代码按照指定的规则, 按顺序执行
+
+      Generator(生成器):
+        1. 是一个构造函数
+        2. 提供一种异步编程解决方案
+        3. 内部封装多个状态, 也被称为状态生成器
+
+      执行Generator函数:
+        1. 返回一个Iterator迭代器对象
+
+      Generator函数特殊写法:
+        function *gen(){
+          yield "状态1";
+          yield "状态2";
+          yield "状态3";
+          yield "状态4";
+        }
+
+        * :    在function关键字和函数名之间 (表示声明时一个异步函数)
+        yield: 在函数体内部, 使用yield表达式, 定义不同的状态
+
+    */
+
+    function *gen(){
+      yield '状态1';
+      yield '状态2';
+      yield '状态3';
+      yield '状态4';
+      return "结束"
+    }
+
+    // 调用生成器函数, 返回一个迭代器对象(生成器对象)
+    /* 
+      注意: 调用生成器函数时, 函数不会真正执行, 只会创建一个迭代器对象返回
+    */
+    let it = gen();
+    console.log(it); //gen {<suspended>}
+
+    /* 
+      只有调用迭代器的next函数时, 生成器函数才会真正执行, 并返回值
+        1. 返回一个对象: {value: "状态1", done: false}
+        2. 每调用一次, 其返回值并不是一样的, 而是会返回不同的状态值
+    */
+    let re = it.next();
+    console.log(re); //{value: "状态1", done: false}
+
+    let re1 = it.next();
+    console.log(re1); //{value: "状态2", done: false}
+
+    let re2 = it.next();
+    console.log(re2); //{value: "状态3", done: false}
+
+    let re3 = it.next();
+    console.log(re3); //{value: "状态4", done: false}
+
+    let re4 = it.next();
+    console.log(re4); //{value: "结束", done: true}
+
+    let re5 = it.next();
+    console.log(re5); //{value: undefined, done: true}
+
+  </script>
+</body>
+
+</html>

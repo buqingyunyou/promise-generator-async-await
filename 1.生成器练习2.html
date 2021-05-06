@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+
+<body>
+  <!-- 
+     需求：请求a数据，再请求b数据，请求c数据
+   -->
+  <script>
+    // 第一步: 定义生成器函数
+    function * gen(){
+      yield setTimeout(()=>{
+        console.log("a数据请求成功");
+        /* 
+          当调用next函数时, 会执行第一个yield后面代码,并返回其返回值, 此时再调用一次next,则会执行下一个yield后面代码
+        */
+        it.next();
+      },1000);
+      yield setTimeout(()=>{
+        console.log("b数据请求成功");
+        it.next();
+      },1000);
+      yield setTimeout(()=>{
+        console.log("c数据请求成功");
+        it.next();
+      },1000);
+      console.log("所有数据已请求完毕..");
+    }
+    // 第二步: 调用生成器函数, 得到迭代器对象
+    const it = gen();
+    it.next();
+
+  </script>
+</body>
+
+</html>

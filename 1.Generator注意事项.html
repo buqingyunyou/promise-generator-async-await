@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+
+<body>
+  <script>
+    /* 
+      1. 生成器函数内代码, 不会在调用的时候马上执行, 只会创建一个迭代器对象返回, 只有使用该迭代器对象调用next方法, 生成器内部的代码才会真正执行, 并返回动态的状态
+      2. 调用生成器函数不会执行, 只会返回一个迭代器对象, 然后执行后面的代码, 不会去执行yield后面的代码
+      
+    */
+
+    {
+      let myIterator = {}
+      /* 
+        对象没有Iterator接口, 可以手动部署
+      */
+      myIterator[Symbol.iterator] = function * (){
+        yield 1
+        yield 2
+        yield 3
+      }
+
+      for(let prop of myIterator){
+        console.log(prop);
+      }
+    }
+  </script>
+</body>
+
+</html>

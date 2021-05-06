@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+
+<body>
+  <button id="btn">按钮</button>
+  <ul id="ul"></ul>
+  <!-- 
+    需求: 
+      要执行一个异步操作,异步操作执行之后,要拿到异步操作的结果,然后根据结果,将数据渲染到页面上
+   -->
+
+  <script>
+    // //绑定点击事件 
+    btn.onclick = async function (){
+      // console.log(1);
+      try{
+        // await接promise对象,那么其返回值就是promise对象成功的值
+        let res = await getData();
+        console.log(res);
+        console.log("测试会不会执行到这里..");
+
+        // 此处出错, 则会直接进入到catch中执行代码
+        // console.log(a);
+
+        let arr = res.map((item)=>{
+          return `<li>${item}</li>`
+        })
+
+        ul.innerHTML = arr.join("");
+      }catch{
+        // 如果上面代码出错了, 会执行catch中代码
+        // 如果上面代码没出错, 但promise是失败的, 也会执行catch中的代码
+        document.body.innerHTML = `<h1>网络错误,请稍后重试`;
+      }
+    }
+
+    // let re = getData();
+    // console.log(re);
+    // 具体发送请求, 获取数据的代码
+    function getData(){
+      return new Promise((resolve,reject)=>{
+        setTimeout(()=>{
+          let arr = ["a","b","c"]
+          resolve(arr);
+
+          // 此处如果promise对象失败, 也会进入到catch中执行代码
+          // reject()
+
+        },1000)
+      })
+    }
+
+    {
+    //绑定点击事件 
+
+    // btn.onclick = async function () {
+    //   // console.log(1);
+    //   // await接promise对象,那么其返回值就是promise对象成功的值
+    //   let res = await getData();
+    //   console.log(res);
+
+    //   // promise状态改变之前, 不会执行后面的代码
+    //   console.log("测试会不会执行到这里..");
+
+    //   /* 
+    //     要求得到: arr = ['<li>${item}</li>','<li>${item}</li>','<li>${item}</li>']
+    //   */
+    //   let arr = res.map((item) => {
+    //     // map方法, 根据一个数组, 生成另一个相同长度的数据
+    //     return `<li>${item}</li>`
+    //   })
+    //   // 将数组转为字符串, 渲染到页面
+    //   ul.innerHTML = arr.join('');
+
+    // }
+
+    // // let re = getData();
+    // // console.log(re);
+    // // 具体发送请求, 获取数据的代码
+    // function getData() {
+    //   return new Promise((resolve, reject) => {
+    //     // console.log("a");
+    //     setTimeout(() => {
+    //       let arr = ["a", "b", "c"]
+    //       resolve(arr);
+    //       // console.log(arr);
+    //       // reject()
+
+    //     }, 2000)
+    //   })
+    // }
+
+    }
+  </script>
+</body>
+
+</html>
